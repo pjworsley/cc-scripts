@@ -10,8 +10,8 @@ function storage.build_map()
             item_name = item["name"];
             -- populate table
             entry_info = {
-                inv_name = peripheral.getName(inv)
-                slot = slot
+                inv_name = peripheral.getName(inv),
+                slot = slot,
                 count = item["count"]
             };
             -- add table to map
