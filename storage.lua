@@ -29,7 +29,9 @@ function storage.count(item_name, item_map)
     item_map = item_map or storage.build_map()
     total = 0
     if item_map[item_name] then
-        total = #item_map[item_name]
+        for _, item in ipairs(item_map[item_name])
+            total = total + item["count"]
+        end
     end
     return total
 end
