@@ -28,7 +28,7 @@ end
 function storage.count(item_name, item_map)
     item_map = item_map or storage.build_map()
     total = 0
-    if not item_map[item_name] == nil then
+    if item_map[item_name] then
         total = #item_map[item_name]
     end
     return total
