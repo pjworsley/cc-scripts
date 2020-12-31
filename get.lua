@@ -1,6 +1,6 @@
 local storage = require("storage")
 
-if not args then
+if not arg then
     print("Usage: get item_name [amount]")
     return false
 end

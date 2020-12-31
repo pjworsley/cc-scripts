@@ -1,8 +1,8 @@
 local storage = require("storage")
 
-if not args then
+if not arg then
     print("Usage: get item_name")
     return
 end
 
-print(storage.count(args[1]))
+print(storage.count(arg[1]))
