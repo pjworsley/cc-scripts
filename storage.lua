@@ -41,7 +41,7 @@ function storage.move_item(item_name, amount, to_name)
     -- attempt to move items to destination
     if total == 0 then
         print("No items matching", item_name);
-    else if total < amount then
+    elseif total < amount then
         print("Only", total, "items in system, taking no action")
     else
         remaining = amount;
