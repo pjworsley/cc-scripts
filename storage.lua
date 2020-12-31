@@ -1,6 +1,8 @@
+local storage = {}
+
 storage_type = "rftoolsstorage:modular_storage"
 
-function query_storage(item_name)
+function storage.query(item_name)
     inventories = {peripheral.find(storage_type)};
     entries = {};
     for _, inv in ipairs(inventories) do
@@ -14,7 +16,7 @@ function query_storage(item_name)
     return entries;
 end
 
-function total_items(items)
+function storage.total_items(items)
     total = 0;
     for _ , stack in ipairs(items) do
         total = total + items[i]["count"];
