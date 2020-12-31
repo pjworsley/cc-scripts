@@ -43,24 +43,27 @@ function storage.move_item(item_name, amount, to_name)
     -- attempt to move items to destination
     if total == 0 then
         print("No items matching", item_name)
-    elseif total < amount then
-        print("Only", total, "items in system, taking no action")
-    else
-        remaining = amount
-
-        for _, entry in ipairs(item_map[item_name]) do
-            inv = peripheral.wrap(entry["inv_name"])
-            -- attempt to all the items we need
-            inv.pushItems(to_name, entry["slot"], remaining)
-            -- break if we just pushed all we need
-            remaining = remaining - entry["count"]
-            if remaining <= 0 then
-                print("Moved", amount, "items to", to_name)
-                break
-            end
-            -- otherwise continue looping
-        end
+        return false
     end
+    if total < amount then
+        print("Only", total, "items in system, taking no action")
+        return false
+    end
+
+    remaining = amount
+    for _, entry in ipairs(item_map[item_name]) do
+        inv = peripheral.wrap(entry["inv_name"])
+        -- attempt to all the items we need
+        inv.pushItems(to_name, entry["slot"], remaining)
+        -- break if we just pushed all we need
+        remaining = remaining - entry["count"]
+        if remaining <= 0 then
+            break
+        end
+        -- otherwise continue looping
+    end
+    print("Moved", amount, "items to", to_name)
+    return true
 end
 
 return storage
