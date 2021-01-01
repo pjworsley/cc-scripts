@@ -15,10 +15,11 @@ if addressbook[arg[1]] == nil then
     for key, _ in pairs(addressbook) do
         print(" -", key)
     end
+    return
 end
 
 -- wait for send chest to empty
-while #send_chest.list() > 0 then
+while #send_chest.list() > 0 do
     print(
         "Waiting for chest to empty,",
         #send_chest.list(),
