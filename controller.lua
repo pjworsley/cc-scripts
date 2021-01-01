@@ -6,7 +6,7 @@ function move_all_items(from_id, to_id)
     from_inv = peripheral.wrap("minecraft:chest_" .. from_id)
     to_name = "minecraft:chest_" .. to_id
 
-    for slot, _ in ipairs(from_inv) do
+    for slot, _ in ipairs(from_inv.list()) do
         from_inv.pushItems(to_name, slot)
     end
 end
