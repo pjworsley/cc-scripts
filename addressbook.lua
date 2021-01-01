@@ -13,8 +13,8 @@ addr_map = {
         to_chest = 6,
     },
     pete = {
-        computer = 12
-        from_chest = 8
+        computer = 12,
+        from_chest = 8,
         to_chest = 9
     }
 }
