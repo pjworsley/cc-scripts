@@ -1,7 +1,7 @@
 local addressbook = require("addressbook")
 
 protocol = "postal"
-modem_name = "left"
+modem_name = "top"
 send_chest = peripheral.wrap("right")
 
 if #arg == 0 then
