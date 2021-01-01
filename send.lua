@@ -17,14 +17,15 @@ function check_arguments()
     if #arg == 0 then
         print("Usage: send recipient")
         list_recipients()
-        exit()
+        return false
     end
     -- check name exists in addressbook
     if addressbook[arg[1]] == nil then
         print("Recipient not in address book!")
         list_recipients()
-        exit()
+        return false
     end
+    return true
 end
 
 function wait_for_empty(chest)
@@ -39,28 +40,30 @@ function wait_for_empty(chest)
 end
 
 function main()
-    -- check user supplied args
-    check_arguments()
-    -- wait for send chest to empty
-    wait_for_empty(send_chest)
-    -- open modem
-    rednet.open(modem_name)
-    -- check connection to controller
-    rednet.send(
-        addressbook["controller"]["computer"],
-        "ping",
-        protocol)
-    response = rednet.receive(protocol, 5)
-    if response == nil then
-        -- controller is offline
-        print("Controller is offline! Unable to do anything.")
-    else
-        -- send to controller, message payload is id of recipient computer
+    -- check user supplied args, exit early if issues
+    result = check_arguments()
+    if result then
+        -- wait for send chest to empty
+        wait_for_empty(send_chest)
+        -- open modem
+        rednet.open(modem_name)
+        -- check connection to controller
         rednet.send(
             addressbook["controller"]["computer"],
-            addressbook[arg[1]]["computer"],
+            "ping",
             protocol)
-        print("Sent to", arg[1])
+        response = rednet.receive(protocol, 5)
+        if response == nil then
+            -- controller is offline
+            print("Controller is offline! Unable to do anything.")
+        else
+            -- send to controller, message payload is id of recipient computer
+            rednet.send(
+                addressbook["controller"]["computer"],
+                addressbook[arg[1]]["computer"],
+                protocol)
+            print("Sent to", arg[1])
+        end
     end
 end
 
