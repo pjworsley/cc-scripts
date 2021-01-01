@@ -3,6 +3,7 @@ local addressbook = require("addressbook")
 protocol = "postal"
 
 function handle_ping(sender_id)
+    print("Responding to ping from", sender_id)
     rednet.send(sender_id, "pong", postal)
 end
 
