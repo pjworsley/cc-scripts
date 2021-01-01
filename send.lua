@@ -30,5 +30,9 @@ end
 
 -- send the message
 rednet.open(modem_name)
-rednet.send(addressbook["controller"]["computer"], arg[1], protocol)
+-- send to controller, message payload is id of recipient computers
+rednet.send(
+    addressbook["controller"]["computer"],
+    addressbook[arg[1]]["computer"],
+    protocol)
 print("Sent to", arg[1])
