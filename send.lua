@@ -7,7 +7,7 @@ send_chest = peripheral.wrap("right")
 function list_recipients()
     print("Recipient list:")
     for key, _ in pairs(addressbook) do
-        if not key == "controller" then
+        if key ~= "controller" then
             print(" -", key)
         end
     end
