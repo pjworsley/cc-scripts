@@ -2,6 +2,10 @@ local addressbook = require("addressbook")
 
 protocol = "postal"
 
+function handle_ping(sender_id)
+    rednet.send(sender_id, "pong", postal)
+end
+
 function move_all_items(from_name, to_name)
     from_inv = peripheral.wrap(from_name)
     for slot, _ in ipairs(from_inv.list()) do
@@ -21,7 +25,7 @@ function generate_chest_name(chest_id)
     return "minecraft:chest_" .. chest_id
 end
 
-function handle_message(sender_id, recipient_id)
+function handle_send_request(sender_id, recipient_id)
     sender_name, sender_info = get_info(sender_id)
     recipient_name, recipient_info = get_info(recipient_id)
     print(
@@ -36,6 +40,14 @@ function handle_message(sender_id, recipient_id)
         generate_chest_name(sender_info["from_chest"]),
         generate_chest_name(recipient_info["to_chest"])
     )
+end
+
+function handle_message(sender, message)
+    if message == "ping" then
+        handle_ping(sender)
+    else
+        handle_send_request(sender, message)
+    end
 end
 
 function start(modem_name)
