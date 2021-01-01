@@ -13,34 +13,55 @@ function list_recipients()
     end
 end
 
-if #arg == 0 then
-    print("Usage: send recipient")
-    list_recipients()
-    return
+function check_arguments()
+    if #arg == 0 then
+        print("Usage: send recipient")
+        list_recipients()
+        exit()
+    end
+    -- check name exists in addressbook
+    if addressbook[arg[1]] == nil then
+        print("Recipient not in address book!")
+        list_recipients()
+        exit()
+    end
 end
 
--- check name exists in addressbook
-if addressbook[arg[1]] == nil then
-    print("Recipient not in address book!")
-    list_recipients()
-    return
+function wait_for_empty(chest)
+    while #chest.list() > 0 do
+        print(
+            "Waiting for chest to empty,",
+            #chest.list(),
+            "stack(s) remain."
+        )
+        sleep(1)
+    end
 end
 
--- wait for send chest to empty
-while #send_chest.list() > 0 do
-    print(
-        "Waiting for chest to empty,",
-        #send_chest.list(),
-        "stack(s) remain."
-    )
-    sleep(1)
+function main()
+    -- check user supplied args
+    check_arguments()
+    -- wait for send chest to empty
+    wait_for_empty(send_chest)
+    -- open modem
+    rednet.open(modem_name)
+    -- check connection to controller
+    rednet.send(
+        addressbook["controller"]["computer"],
+        "ping",
+        protocol)
+    response = rednet.receive(protocol, 5)
+    if response == nil then
+        -- controller is offline
+        print("Controller is offline! Unable to do anything.")
+    else
+        -- send to controller, message payload is id of recipient computer
+        rednet.send(
+            addressbook["controller"]["computer"],
+            addressbook[arg[1]]["computer"],
+            protocol)
+        print("Sent to", arg[1])
+    end
 end
 
--- send the message
-rednet.open(modem_name)
--- send to controller, message payload is id of recipient computers
-rednet.send(
-    addressbook["controller"]["computer"],
-    addressbook[arg[1]]["computer"],
-    protocol)
-print("Sent to", arg[1])
+main()
