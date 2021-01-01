@@ -23,12 +23,12 @@ while #send_chest.list() > 0 do
     print(
         "Waiting for chest to empty,",
         #send_chest.list(),
-        "items remain."
+        "stack(s) remain."
     )
     sleep(1)
 end
 
 -- send the message
 rednet.open(modem_name)
-rednet.send(addressbook["controller"], arg[1], protocol)
+rednet.send(addressbook["controller"]["computer"], arg[1], protocol)
 print("Sent to", arg[1])
