@@ -21,6 +21,11 @@ addr_map = {
         computer = 13,
         from_chest = 10,
         to_chest = 11
+    },
+    sam = {
+        computer = 14,
+        from_chest = 12,
+        to_chest = 13
     }
 }
 
