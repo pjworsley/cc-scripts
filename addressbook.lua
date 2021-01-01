@@ -4,13 +4,13 @@ addr_map = {
     },
     connor = {
         computer = 9,
-        in_chest = 3,
-        out_chest = 5,
+        from_chest = 3,
+        to_chest = 5,
     },
     james = {
         computer = 11,
-        in_chest = 4,
-        out_chest = 6,
+        from_chest = 4,
+        to_chest = 6,
     }
 }
 

@@ -14,7 +14,7 @@ end
 function get_sender_chest_name(sender_computer_id)
     for key, val in pairs(addressbook) do
         if val["computer"] == sender_computer_id then
-            return "minecraft:chest_" .. val["in_chest"]
+            return "minecraft:chest_" .. val["from_chest"]
         end
     end
 end
