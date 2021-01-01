@@ -4,17 +4,25 @@ protocol = "postal"
 modem_name = "top"
 send_chest = peripheral.wrap("right")
 
+function list_recipients()
+    print("Recipient list:")
+    for key, _ in pairs(addressbook) do
+        if not key == "controller" then
+            print(" -", key)
+        end
+    end
+end
+
 if #arg == 0 then
     print("Usage: send recipient")
+    list_recipients()
     return
 end
 
 -- check name exists in addressbook
 if addressbook[arg[1]] == nil then
-    print("Recipient not in address book. Valid options are:")
-    for key, _ in pairs(addressbook) do
-        print(" -", key)
-    end
+    print("Recipient not in address book!")
+    list_recipients()
     return
 end
 
