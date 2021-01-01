@@ -29,7 +29,7 @@ function handle_message(sender_id, recipient_id)
         sender_name,
         "(chest_" .. sender_info["from_chest"] .. ") to",
         recipient_name,
-        "(chest_" .. recipient_name["to_chest"] .. ")."
+        "(chest_" .. recipient_info["to_chest"] .. ")."
     )
     -- move items between the chests
     move_all_items(
