@@ -4,7 +4,7 @@ local storagehelper = require("storagehelper")
 
 protocol = "oreprocessing"
 ingot_store_type = "appliedenergistics2:interface"
-ore_store = peripheral.wrap("left")
+ore_store = peripheral.wrap("minecraft:chest_17")
 multiplier = 4
 
 function get_info(computer_id)
