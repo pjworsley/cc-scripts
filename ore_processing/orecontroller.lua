@@ -59,10 +59,12 @@ function handle_process_ore_request(sender_id)
     -- any ore that is left in the chest at this point cannot be processed
     -- and so should be returned to owner
     if #input_chest.list() > 0 then
-        print("Returning", #input_chest.list(), "to", client_name)
-        for slot, _ in ipairs(input_chest.list()) do
+        returned = 0
+        for slot, stack in ipairs(input_chest.list()) do
             input_chest.pushItems(ingot_chest_name, slot)
+            returned = returned + stack["count"]
         end
+        print("Returned", returned, "unused ores to", client_name)
     end
 end
 
