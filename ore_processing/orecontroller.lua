@@ -3,7 +3,7 @@ local ore_map = require("oremap")
 local storagehelper = require("storagehelper")
 
 protocol = "oreprocessing"
-ingot_store_type = "applied_energistics2:interface"
+ingot_store_type = "appliedenergistics2:interface"
 ore_store = peripheral.wrap("right")
 multiplier = 4
 
@@ -23,16 +23,17 @@ function ingot_in_stock(ore_name, ore_num)
 end
 
 function handle_process_ore_request(sender_id)
-    sender = get_info(sender_id)
-    ingot_chest_name = "minecraft:chest_" .. sender["ingot_chest"]
+    client_name, client_info = get_info(sender_id)
+    ingot_chest_name = "minecraft:chest_" .. client_info["ingot_chest"]
     -- loop through input chest contents
-    input_chest = peripheral.wrap("minecraft:chest_" .. sender["ore_chest"])
+    input_chest = peripheral.wrap("minecraft:chest_" .. client_info["ore_chest"])
     for slot, stack in ipairs(input_chest.list()) do
         -- check ore is supported
         if ore_map[stack["name"]] ~= nil then
             -- do trade 1 ore at a time, slow, but careful
             for i=1, stack["count"] do
                 -- attempt to push 4 ingots
+                print("Attempting to send 4", ore_map[stack["name"]], "to", client_name)
                 success = storagehelper.move_item(
                     ingot_store_type,
                     ore_map[stack["name"]],
@@ -40,6 +41,7 @@ function handle_process_ore_request(sender_id)
                     ingot_chest_name)
 
                 if success then
+                    print("Taking 1 ore from", client_name, "as payment")
                     -- push 1 ore into ore store
                     input_chest.pushItems(
                         peripheral.getName(ore_store),
@@ -48,6 +50,7 @@ function handle_process_ore_request(sender_id)
                 else
                     -- break the loop over the stack of ore, as the remainder
                     -- wont work either
+                    print("No stock for transaction.")
                     break
                 end
             end
@@ -56,7 +59,7 @@ function handle_process_ore_request(sender_id)
     -- any ore that is left in the chest at this point cannot be processed
     -- and so should be returned to owner
     if #input_chest.list() > 0 then
-        print("Returning", #input_chest.list(), "to owner...")
+        print("Returning", #input_chest.list(), "to", client_name)
         for slot, _ in ipairs(input_chest.list()) do
             input_chest.pushItems(ingot_chest_name, slot)
         end
