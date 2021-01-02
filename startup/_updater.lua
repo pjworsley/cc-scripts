@@ -14,10 +14,3 @@ for _, filename in ipairs(scripts) do
     file.close()
     request.close()
 end
-
-if os.getComputerID() == 10 then
-    if fs.exists("/startup/controller.lua") then
-        fs.delete("/startup/controller.lua")
-    end
-    fs.move("/controller.lua", "/startup/controller.lua")
-end
