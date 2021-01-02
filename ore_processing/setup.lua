@@ -27,7 +27,7 @@ if fs.exists(update_script_path) then
     fs.delete(update_script_path)
 end
 file = fs.open(update_script_path, "w")
-file.write(content=)
+file.write(content)
 file.close()
 print("Setup complete. Rebooting in 3 seconds.")
 sleep(3)
