@@ -4,7 +4,7 @@ local storagehelper = require("storagehelper")
 
 protocol = "oreprocessing"
 ingot_store_type = "appliedenergistics2:interface"
-ore_store = peripheral.wrap("right")
+ore_store = peripheral.wrap("left")
 multiplier = 4
 
 function get_info(computer_id)
