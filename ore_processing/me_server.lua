@@ -1,16 +1,15 @@
-local ore_map = require("oremap")
 local storagehelper = require("storagehelper")
 
 PROTOCOL = "IDIOTN"
-MODEM = peripheral.wrap("top")
+MODEM = peripheral.wrap("back")
 INGOT_STORE_TYPE = "appliedenergistics2:interface"
-OUTPUT_CHEST_NAME = "minecraft:chest_20"
+OUTPUT_CHEST = peripheral.wrap("minecraft:chest_29")
 
 function mysplit (inputstr, sep)
     if sep == nil then
         sep = "%s"
     end
-    local t={}
+    local t = {}
     for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
         table.insert(t, str)
     end
