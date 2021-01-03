@@ -3,7 +3,7 @@ local storagehelper = require("storagehelper")
 PROTOCOL = "IDIOTN"
 MODEM = peripheral.wrap("back")
 INGOT_STORE_TYPE = "appliedenergistics2:interface"
-OUTPUT_CHEST = peripheral.wrap("minecraft:chest_29")
+OUTPUT_CHEST = peripheral.wrap("minecraft:chest_30")
 
 function mysplit (inputstr, sep)
     if sep == nil then
