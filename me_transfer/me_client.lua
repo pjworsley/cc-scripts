@@ -2,7 +2,7 @@ local meclient = {}
 
 PROTOCOL = "IDIOTN"
 SERVER = 15
-MODEM = peripheral.wrap("top")
+MODEM = peripheral.wrap("left")
 
 function ping_server()
     rednet.send(SERVER, "ping", PROTOCOL)

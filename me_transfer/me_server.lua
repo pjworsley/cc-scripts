@@ -1,7 +1,7 @@
 local storagehelper = require("storagehelper")
 
 PROTOCOL = "IDIOTN"
-MODEM = peripheral.wrap("back")
+MODEM = peripheral.wrap("top")
 INGOT_STORE_TYPE = "appliedenergistics2:interface"
 OUTPUT_CHEST = peripheral.wrap("minecraft:chest_30")
 
