@@ -14,6 +14,7 @@ scripts["/chestmap.lua"] = "ore_processing/chestmap.lua"
 scripts["/oremap.lua"] = "ore_processing/oremap.lua"
 scripts["/orecontroller.lua"] = "ore_processing/orecontroller.lua"
 scripts["/storagehelper.lua"] = "shared/storagehelper.lua"
+scripts["/me_client.lua"] = "me_transfer/me_client.lua"
 
 baseurl = "https://raw.githubusercontent.com/pjworsley/cc-scripts/master/"
 

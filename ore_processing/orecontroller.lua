@@ -1,9 +1,10 @@
 local chest_map = require("chestmap")
 local ore_map = require("oremap")
+local me_client = require("me_client")
 local storagehelper = require("storagehelper")
 
-INGOT_STORE_TYPE = "appliedenergistics2:interface"
-ORE_STORE = peripheral.wrap("minecraft:chest_17")
+INGOT_STORE_TYPE = "minecraft:trapped_chest"
+ORE_STORE = peripheral.wrap("minecraft:chest_35")
 MULTIPLIER = 4
 
 function perform_transaction(input_chest, output_chest)
@@ -13,7 +14,16 @@ function perform_transaction(input_chest, output_chest)
         if ore_map[stack["name"]] ~= nil then
             -- do trade 1 ore at a time. This is slow, but careful.
             for i=1, stack["count"] do
-                -- attempt to push 4 ingots
+                -- request ingots from ME computer
+                me_success = me_client.request(
+                    ore_map[stack["name"]],
+                    MULTIPLIER)
+                if not me_success then
+                    print("me item request failed!")
+                    break
+                end
+
+                -- move 4 ingots to output chest
                 success = storagehelper.move_item(
                     INGOT_STORE_TYPE,
                     ore_map[stack["name"]],
