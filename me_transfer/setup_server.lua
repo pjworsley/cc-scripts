@@ -5,7 +5,7 @@ function write_file(path, content)
 end
 
 if not fs.exists("/startup") then
-    fs.mkdir("/startup")
+    fs.makeDir("/startup")
 end
 
 updater_script = [[
