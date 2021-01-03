@@ -17,7 +17,7 @@ function meclient.request(item_name, amount)
         print("Controller is offline!")
         return false
     end
-    rednet.send(SERVER, item_name .. amount, PROTOCOL)
+    rednet.send(SERVER, item_name .. " " .. amount, PROTOCOL)
     sender, success, _ = rednet.receive(PROTOCOL, 5)
     return success
 end

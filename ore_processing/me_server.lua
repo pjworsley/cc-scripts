@@ -16,19 +16,19 @@ function mysplit (inputstr, sep)
     return t
 end
 
-function parse_message(message)
+function parse_request(message)
     t = mysplit(message)
-    return t[1], t[2]
+    return t[1], tonumber(t[2])
 end
 
 function handle_ingot_request(sender, message)
-    item_name, amount = parse_message(message)
+    item_name, amount = parse_request(message)
     print("Request for", amount, item_name)
     success = storagehelper.move_item(
         INGOT_STORE_TYPE,
         item_name,
         amount,
-        OUTPUT_CHEST_NAME)
+        peripheral.getName(OUTPUT_CHEST))
     rednet.send(sender, success, PROTOCOL)
     print("Delivered items:", success)
 end
