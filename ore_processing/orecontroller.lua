@@ -73,7 +73,7 @@ function check_input_chests()
                 get_chest(info["ingot_chest"])
             )
             stat = num_ore_pending - num_unprocessed .. "/" .. num_ore_pending
-            print("Processed", stat "for", name)
+            print("Processed", stat, "for", name)
         end
     end
 end
