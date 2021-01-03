@@ -1,7 +1,7 @@
 local meclient = {}
 
 PROTOCOL = "IDIOTN"
-SERVER = 15
+SERVER = 17
 MODEM = peripheral.wrap("left")
 
 function ping_server()
