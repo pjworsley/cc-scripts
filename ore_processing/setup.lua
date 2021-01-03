@@ -4,7 +4,7 @@ end
 
 updater_script = [[
 scripts = {
-    "/addressbook.lua",
+    "/chestmap.lua",
     "/oremap.lua",
     "/orecontroller.lua",
     "/storagehelper.lua"

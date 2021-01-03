@@ -1,50 +1,29 @@
-local addressbook = require("addressbook")
+local chest_map = require("chestmap")
 local ore_map = require("oremap")
 local storagehelper = require("storagehelper")
 
-protocol = "oreprocessing"
-ingot_store_type = "appliedenergistics2:interface"
-ore_store = peripheral.wrap("minecraft:chest_17")
-multiplier = 4
+INGOT_STORE_TYPE = "appliedenergistics2:interface"
+ORE_STORE = peripheral.wrap("minecraft:chest_17")
+MULTIPLIER = 4
 
-function get_info(computer_id)
-    for key, val in pairs(addressbook) do
-        if val["computer"] == computer_id then
-            return key, val
-        end
-    end
-end
-
-function ingot_in_stock(ore_name, ore_num)
-    ingot_name = ore_map[ore_name]
-    item_map = storagehelper.build_map(ingot_store_type)
-    ingots_available = storagehelper.count(item_map, ingot_name)
-    return ingots_available >= ore_num * multiplier
-end
-
-function handle_process_ore_request(sender_id)
-    client_name, client_info = get_info(sender_id)
-    ingot_chest_name = "minecraft:chest_" .. client_info["ingot_chest"]
+function perform_transaction(input_chest, output_chest)
     -- loop through input chest contents
-    input_chest = peripheral.wrap("minecraft:chest_" .. client_info["ore_chest"])
     for slot, stack in ipairs(input_chest.list()) do
         -- check ore is supported
         if ore_map[stack["name"]] ~= nil then
-            -- do trade 1 ore at a time, slow, but careful
+            -- do trade 1 ore at a time. This is slow, but careful.
             for i=1, stack["count"] do
                 -- attempt to push 4 ingots
-                print("Attempting to send 4", ore_map[stack["name"]], "to", client_name)
                 success = storagehelper.move_item(
-                    ingot_store_type,
+                    INGOT_STORE_TYPE,
                     ore_map[stack["name"]],
-                    multiplier,
-                    ingot_chest_name)
+                    MULTIPLIER,
+                    peripheral.getName(output_chest))
 
                 if success then
-                    print("Taking 1 ore from", client_name, "as payment")
-                    -- push 1 ore into ore store
+                    -- take payment of 1 ore
                     input_chest.pushItems(
-                        peripheral.getName(ore_store),
+                        peripheral.getName(ORE_STORE),
                         slot,
                         1)
                 else
@@ -56,41 +35,53 @@ function handle_process_ore_request(sender_id)
             end
         end
     end
-    ore_returned = 0
+    unprocessed_ore = 0
     -- any ore that is left in the chest at this point cannot be processed
     -- and so should be returned to owner
     if #input_chest.list() > 0 then
         for slot, stack in ipairs(input_chest.list()) do
-            input_chest.pushItems(ingot_chest_name, slot)
-            ore_returned = ore_returned + stack["count"]
+            input_chest.pushItems(peripheral.getName(output_chest), slot)
+            unprocessed_ore = unprocessed_ore + stack["count"]
         end
-        print("Returned", ore_returned, "unused ores to", client_name)
     end
-    return ore_returned
+    return unprocessed_ore
 end
 
-function handle_ping(sender_id)
-    print("Responding to ping from", sender_id)
-    rednet.send(sender_id, "pong", protocol)
+function get_chest(chest_id)
+    return peripheral.wrap("minecraft:chest_" .. chest_id)
 end
 
-function handle_message(sender_id, message)
-    if message == "ping" then
-        handle_ping(sender_id)
-    else
-        handle_process_ore_request(sender_id)
+function check_input_chests()
+    -- loop through each input chest and process the contents
+    for name, info in pairs(chest_map) do
+        input_chest = get_chest(info["ore_chest"])
+        num_ore_pending = #input_chest.list()
+        if num_ore_pending > 0 then
+            print(name, "is waiting for ingots")
+            num_unprocessed = perform_transaction(
+                input_chest,
+                get_chest(info["ingot_chest"])
+            )
+            stat = num_ore_pending - num_unprocessed .. "/" .. num_ore_pending
+            print("Processed", stat "for", name)
+        end
     end
 end
 
-function start(modem_name)
-    print("Setting up rednet...")
-    rednet.open(modem_name)
-    print("Ready.")
+function system_check()
+    -- loop through all the chests in map and try to access each of them
+    for name, info in pairs(chest_map) do
+        get_chest(info["ore_chest"])
+        get_chest(info["ingot_chest"])
+    end
+end
+
+function start()
+    print("Ready. Hold ctrl-t to interrupt.")
     while true do
-        print("Waiting for messages...")
-        sender, message, _ = rednet.receive(protocol)
-        handle_message(sender, message)
+        check_input_chests()
+        sleep(5)
     end
 end
 
-start("back")
+start()
