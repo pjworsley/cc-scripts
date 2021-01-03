@@ -2,7 +2,6 @@ local meclient = {}
 
 PROTOCOL = "IDIOTN"
 SERVER = 15
-CHEST = peripheral.wrap("minecraft:chest_21")
 MODEM = peripheral.wrap("top")
 
 function ping_server()
