@@ -7,6 +7,14 @@ INGOT_STORE_TYPE = "minecraft:trapped_chest"
 ORE_STORE = peripheral.wrap("minecraft:chest_35")
 MULTIPLIER = 4
 
+function wait_for_items(chest, item, amount)
+    item_map = storagehelper.build_map(INGOT_STORE_TYPE)
+    while storagehelper.count(item_map, item) < amount do
+        item_map = storagehelper.build_map(INGOT_STORE_TYPE)
+        sleep(1)
+    end
+end
+
 function perform_transaction(input_chest, output_chest)
     -- loop through input chest contents
     for slot, stack in ipairs(input_chest.list()) do
@@ -22,6 +30,9 @@ function perform_transaction(input_chest, output_chest)
                     print("me item request failed!")
                     break
                 end
+
+                -- wait for the ingots to arrive
+                wait_for_items(ore_map[stack["name"]], MULTIPLIER)
 
                 -- move 4 ingots to output chest
                 success = storagehelper.move_item(
