@@ -4,6 +4,7 @@ local me_client = require("me_client")
 local storagehelper = require("storagehelper")
 
 INGOT_STORE_TYPE = "minecraft:trapped_chest"
+INGOT_STORE = peripheral.wrap(INGOT_STORE_TYPE .. "_0")
 ORE_STORE = peripheral.wrap("minecraft:chest_35")
 MULTIPLIER = 4
 
@@ -32,7 +33,7 @@ function perform_transaction(input_chest, output_chest)
                 end
 
                 -- wait for the ingots to arrive
-                wait_for_items(ore_map[stack["name"]], MULTIPLIER)
+                wait_for_items(INGOT_STORE, ore_map[stack["name"]], MULTIPLIER)
 
                 -- move 4 ingots to output chest
                 success = storagehelper.move_item(
