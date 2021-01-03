@@ -19,7 +19,7 @@ end
 
 function parse_message(message)
     t = mysplit(message)
-    return t[0], t[1]
+    return t[1], t[2]
 end
 
 function handle_ingot_request(sender, message)
